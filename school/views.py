@@ -8,3 +8,10 @@ def check(request):
     question = Question.objects.get(id=1)
     # return HttpResponse(student.documents.url)
     return render(request, 'school/check.html', {'student':student, 'question':question})
+
+
+
+
+def input(request):
+    print(request.POST)
+    return render(request, 'school/input.html')
