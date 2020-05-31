@@ -18,31 +18,40 @@
 <body>
 
 	<form class="form-signin" method="POST" action=""{% url 'input' %}">{% csrf_token %}
-		
-		<img class="mb-4" src="static/img/documents/school_ico.png" width="72" height="72">
+
+        <img class="mb-4" src="static/img/documents/school_ico.png" width="72" height="72">
 		<h1 class="h3 mb-3 font-weight-normal">Тіркел</h1>
 
-		<label for="unputfirstname" class="sr-only">Аты</label>
-		<input type="text" id = "" class="form-control" placeholder="Пәленше" name="firstname" >
-
-		<label for="inputsurname" class="sr-only" name="lastname">Фамилия</label>
-		<input type="text" id = "" class="form-control" placeholder="Түгеншиев" name="lastname" >
-
-		<label for="inputphone" class="sr-only">Номер</label>
-		<input type="number" id = "" class="form-control" placeholder="8(XXX) XX XX XXX" name="phone" >
-		
-		<label for="inputEmail" class="sr-only">Почта</label>
-		<input type="email" id = "" class="form-control" placeholder="example@gmail.com" name="email" >
-
-
-		<label for="inputclass" class="sr-only">Класс</label>
+        <label for="inputclass" >Аяқтаған сыныбы</label>
 		<select class="form-control" id = "selectclass" name = "city">
 			<option value = "6">6</option>
 			<option value = "7">7</option>
 			<option value = "8">8</option>
 			<option value = "9">9</option>
 		</select>
+		
+		
 
+		<label for="unputfirstname">Толық аты-жөні</label>
+		<input type="text" id = "" class="form-control" placeholder="ФИО" name="fullname" >
+
+        <label for="unputfirstname">Мектебі</label>
+		<input type="text" id = "" class="form-control" placeholder="148 мектеп-гимназия" name="school" >
+
+        <label for="unputfirstname">Мекен - жайы</label>
+        <input type="text" id = "" class="form-control" placeholder="Айдала" name="address" >
+        
+		<label for="inputphone" >Оқушы номері</label>
+        <input type="number" id = "" class="form-control" placeholder="8(XXX) XX XX XXX" name="student_phone" >
+        
+        <label for="inputphone" >Ата-анасы номері</label>
+		<input type="number" id = "" class="form-control" placeholder="8(XXX) XX XX XXX" name="parent_phone" >
+		
+		<label for="inputEmail" >Почта</label>
+		<input type="email" id = "" class="form-control" placeholder="example@gmail.com" name="email" >
+
+
+	
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
 	</form>
