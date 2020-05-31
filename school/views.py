@@ -15,3 +15,7 @@ def check(request):
 def input(request):
     print(request.POST)
     return render(request, 'school/input.html')
+
+
+def test(request):
+    return render(request, 'school/testing.html')
