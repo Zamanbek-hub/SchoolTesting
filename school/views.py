@@ -131,3 +131,12 @@ def create_test(request):
         question = Question(question = image_path, trueanswer = true_answer, variant = Variant.objects.get(variant = 1))
         question.save()
     return HttpResponse("yes")
+
+
+
+
+
+
+
+def moderator(request):
+    return render(request, 'school/moderator.html')
