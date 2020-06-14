@@ -13,6 +13,8 @@ def check(request):
     return render(request, 'school/check.html', {'student':student, 'question':question})
 
 
+def index(request):
+    return render(request, 'school/index.html')
 
 
 
