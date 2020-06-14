@@ -25,6 +25,7 @@ SECRET_KEY = 'h5h15$m)8j*k#=l%#la6c*59!4zt!sx&%y%6ha=2n!^4nn^(xl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+# DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,6 +83,7 @@ WSGI_APPLICATION = 'Schoolsite.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
 
 DATABASES = {
     'default': {
