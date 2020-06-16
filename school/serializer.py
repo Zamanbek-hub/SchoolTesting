@@ -3,12 +3,12 @@ from .models import *
 
 
 #serilaizer
-class pagination_ser(serializers.ModelSerializer):
+class QuestionModelSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('__all__')
         model = Question #model
 
-class serializa_answer(serializers.ModelSerializer):
+class AnswerModelSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('__all__')
         model = Answer #model

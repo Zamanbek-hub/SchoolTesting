@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +8,41 @@
   <title>Document</title>
 
 </head>
-<body>
-  <div id="posts">
-    
-      {% for question in first_page %}
-        <h1>{{question.trueanswer}}</h1>
-        <img src="{{question.question.url}}" alt="Star" width="200" height="200">
-        <textarea name="name" id='asnwer-{{question.id}}+' rows="8" cols="80"></textarea>
-      {% endfor %}
 
-      
-      <!-- <button onclick="myFunction()"> Submit</button> -->
-    
+<body>
+  <div class="subjects">
+    {% for subject in subjects %}
+    <form method='POST' action="{% url 'testing_page' %}">
+      {% csrf_token %}
+
+      <button class="btn btn-lg btn-primary btn-block" name="selected_subject" type="submit"
+        value="{{subject.id}}">{{subject.subject}}</button>
+      <!-- <input type="subject" name="selected_subject"  id="" value="{{subject.subject}}"> -->
+    </form>
+    {% endfor %}
+  </div>
+
+  <a class="closeBtn" href="{{variant_of_subject.get_absolute_url}}" id="{{variant_of_subject.id}}"></a>
+
+  <div id="posts">
+
+    {% for question in first_page %}
+    <h1>{{question.id}}</h1>
+    <img src="{{question.question.url}}" alt="Star" width="200" height="200">
+    <textarea name="name" id='{{question.id}}' rows="8" cols="80"></textarea>
+    {% endfor %}
+
+
+    <!-- <button onclick="myFunction()"> Submit</button> -->
+
   </div>
 
   {% for i in page_range %}
-    <a href="{{i}}">{{i}}</a>
+  <a href="{{i}}">{{i}}</a>
   {% endfor %}
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
   <!-- <script>
     function myFunction(){
@@ -48,108 +63,101 @@
   </script> -->
 
   <script>
-    $('a').click(function(event){
-        event.preventDefault();
-        var page_n = $(this).attr('href');
-        // console.log(page_n);
-        var answers = [];
-        var answers2 = [];
-        var indexes = new Map();
-        var indexesimg = new Map();
-        var lastQuestion = 0;
-        var n = 3;
-        // answers.set("page_n",3);
-      
-        var textareaList = document.getElementsByTagName("textarea");
-        for(var i = 0; i < textareaList.length; i++){
-            var ans = textareaList[i].id;
-            // console.log(textareaList[i].id.substring(textareaList[i].id.indexOf('-') + 1, textareaList[i].id.indexOf('+')) + ' -' + textareaList[i].value);
-            // console.log(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')))
-            // answers2.push(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')));
-            answers.push(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')));
-            answers.push(textareaList[i].value);
-            //DO SOMETHING
-        }
-        console.log(answers)
-        
-        // ajax
-            $.ajax({
-                    type: "POST",
-                    url: "{% url 'pagination_p' %}", // name of url
-                    data : {
-                    page_n : page_n, //page_number
-                    answers : JSON.stringify(answers),
-                    traditional: true,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (resp) {
-                  console.log('success')
-                    //loop
-                    $('#posts').html('')
-                   $.each(resp, function(i, val) {
-                     // console.log(val.question.url + "dasd");
-                     //apending posts
-                     answers2.push(val.id);
-                     indexes.set(val.id, val.trueanswer);
-                     indexesimg.set(val.id, val.question);
-                     lastQuestion = val.id - n;
-                    // $('#posts').append(
-                    // '<h1>' +  val.trueanswer +  '</h1>' + '\n' +
-                    // '<img src=' + val.question  +' alt="Star" width="200" height="200">' + '\n'
-                    // + '<textarea name="name" id="asnwer-' + val.id +'+" rows="8" cols="80"></textarea>'
-                    // )
-                   });
-                            $.ajax({
-                              type: "POST",
-                              url: "{% url 'serial_answers' %}", // name of url
-                              data : {
-                              answers2 : JSON.stringify(answers2),
-                              traditional: true,
-                              csrfmiddlewaretoken: '{{ csrf_token }}',
-                          },
-                          success: function (resp) {
-                            console.log('success');
-                            console.log(indexes.get(10));
-                            console.log(indexesimg.get(10));
-                              //loop
-                              $('#posts').html('')
-                            $.each(resp, function(i, val) {
-                              // console.log(val.question.url + "dasd");
-                              //apending posts
-                              console.log("variant =" + val.question)
-                              lastQuestion += 1;
-                              if(lastQuestion == val.question){
-                                console.log("yes =")
-                                $('#posts').append(
-                                '<h1>' +  indexes.get(val.question) +  '</h1>' + '\n' +
-                                '<img src=' + indexesimg.get(val.question)  +' alt="Star" width="200" height="200">' + '\n' + 
-                                '<textarea name="name" id="asnwer-' + val.question +'+" rows="8" cols="80">' + val.answer + '</textarea>'
-                                )
-                              }
-                              else{
-                                console.log("lastQuestion =" + lastQuestion)
-                                $('#posts').append(
-                                '<h1>' +  indexes.get(lastQuestion) +  '</h1>' + '\n' +
-                                '<img src=' + indexesimg.get(lastQuestion)  +' alt="Star" width="200" height="200">' + '\n' + 
-                                '<textarea name="name" id="asnwer-' + lastQuestion +'+" rows="8" cols="80">' +  '</textarea>'
-                                )
-                              }
-                            });
+    $('a').click(function (event) {
+      event.preventDefault();
+      var page_n = $(this).attr('href');
+      // console.log(page_n);
+      var answers = [];
+      var index = 0;
+      var question;
+      // var answers2 = [];
+      // var indexes = new Map();
+      // var indexesimg = new Map();
+      // var lastQuestion = 0;
+      // var n = 3;
+      // answers.set("page_n",3);
 
-                            
-                          },
-                          error: function () {
-                            console.log('error')
-                          }
-                      }); 
-                   
-                },
-                error: function () {
-                  console.log('error')
-                }
-            }); //
+      var textareaList = document.getElementsByTagName("textarea");
+      for (var i = 0; i < textareaList.length; i++) {
+        var index = textareaList[i].id;
+        console.log("index=" + index)
+        // console.log(textareaList[i].id.substring(textareaList[i].id.indexOf('-') + 1, textareaList[i].id.indexOf('+')) + ' -' + textareaList[i].value);
+        // console.log(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')))
+        // answers2.push(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')));
+        answers.push(index);
+        answers.push(textareaList[i].value);
+        //DO SOMETHING
+      }
+      console.log(answers)
+
+      // ajax
+      $.ajax({
+        type: "POST",
+        url: $('.closeBtn').attr("href"), // name of url
+        data: {
+          page_n: page_n, //page_number
+          answers: JSON.stringify(answers),
+          traditional: true,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (resp) {
+          console.log('success')
+          //loop
+          $('#posts').html('')
+
+          $.each(resp, function (i, val) {
+            response = val
+            console.log("id = " + response.id)
+            // console.log(val.question.url + "dasd");
+            //apending posts
+
+            // $('#posts').append(
+            // '<h1>' +  val.trueanswer +  '</h1>' + '\n' +
+            // '<img src=' + val.question  +' alt="Star" width="200" height="200">' + '\n'
+            // + '<textarea name="name" id="asnwer-' + val.id +'+" rows="8" cols="80"></textarea>'
+            // )
+          });
+          $.ajax({
+            type: "POST",
+            url: "{% url 'serial_answers' %}", // name of url
+            data: {
+              question: JSON.stringify(response.id),
+              traditional: true,
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (resp2) {
+
+              //loop
+              $('#posts').html('')
+              console.log('val = ' + resp)
+              $.each(resp2, function (i, val) {
+
+                console.log("yes =")
+                $('#posts').append(
+                  '<h1>' + val.question + '</h1>' + '\n' +
+                  '<img src=' + response.question +
+                  ' alt="Star" width="200" height="200">' + '\n' +
+                  '<textarea name="name" id="' + val.question +
+                  '" rows="8" cols="80">' + val.answer + '</textarea>'
+                )
+
+              });
+
+
+            },
+            error: function () {
+              console.log('error')
+            }
+          });
+
+        },
+        error: function () {
+          console.log('error')
+        }
+      }); //
 
     });
   </script>
 </body>
+
 </html>

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'Schoolsite.urls'
@@ -81,15 +83,16 @@ WSGI_APPLICATION = 'Schoolsite.wsgi.application'
 #     }
 # }
 
+
 DATABASES = {
     'default': {
-        'ENGINE'    : 'django.db.backends.postgresql',
-        #'ENGINE'   : 'django.db.backends.postgresql_psycopg2'
-        'NAME'      : 'ykhryuuk',
-        'USER'      : 'ykhryuuk',
-        'PASSWORD'  : 'K4UqF-zeBREkcptQPkYtBkdmbiTDkqPb',
-        'HOST'      : 'rogue.db.elephantsql.com',
-        'PORT'      : '5432'
+        # 'ENGINE'    : 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'osupinyu',
+        'USER': 'osupinyu',
+        'PASSWORD': 'hHO6x4zdTJGzJ-DO1Sw0GEhhUYNa7anx',
+        'HOST': 'rogue.db.elephantsql.com',
+        'PORT': '5432'
     }
 }
 
@@ -130,6 +133,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/img/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/img')
+
+# django_heroku.settings(locals())
