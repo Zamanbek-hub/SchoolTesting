@@ -26,6 +26,8 @@ class Variant(models.Model):
     def __str__(self):
         return str(self.id)
 
+    def get_absolute_url(self):
+        return reverse('pagination_p', kwargs={'variant_of_subject': self.id})
 
 class Teacher(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)

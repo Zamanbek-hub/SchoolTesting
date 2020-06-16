@@ -24,8 +24,9 @@
   <div class="pagination">
 
     {% if questions.has_previous %}
+      <a href="?page={{questions.previous_page_number}}">previous</a>
+    {% else %}
       <a href="?page=1">first</a>
-      <!-- <a href="?page={{questions.previous_page_number}}">previous</a> -->
     {% endif %}
 
     {% for num in questions.paginator.page_range%}
