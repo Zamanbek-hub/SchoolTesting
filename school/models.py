@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from django.utils.timezone import now
+from datetime import timedelta
+# import timedelta
 
 
 class Grade(models.Model):
     grade = models.PositiveIntegerField()
-    duration = models.DurationField(blank=True, default=0)
+    duration = models.DurationField(blank=True, default=timedelta())
 
     def __str__(self):
         return str(self.grade)
@@ -29,6 +31,7 @@ class Variant(models.Model):
     def get_absolute_url(self):
         return reverse('pagination_p', kwargs={'variant_of_subject': self.id})
 
+
 class Teacher(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -45,7 +48,7 @@ class Student(models.Model):
     start = models.DateTimeField(default=now)
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.first_name + " " + str(self.id)
 
 
 class Question(models.Model):
@@ -72,3 +75,9 @@ class Testing(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class AnswerCheck(models.Model):
+    page = models.PositiveIntegerField()
+    id_answer = models.PositiveIntegerField()
+    answer = models.BooleanField(default=False)
