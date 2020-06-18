@@ -21,6 +21,9 @@ def check(request):
 def index(request):
     return render(request, 'school/index.html')
 
+def rate(request):
+    return render(request, 'school/rate.html')
+
 
 def input(request):
     print(request.POST)
