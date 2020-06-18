@@ -2,21 +2,24 @@
 <html lang="en">
 
 <head>
+  {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link rel="stylesheet" href="{% static 'css/testing.css' %}">
 
 </head>
 
 <body>
+
   <div class="subjects">
     {% for subject in subjects %}
-    <form method='POST' action="{% url 'testing_page' %}">
+    <form method='POST' class="subject_form" action="{% url 'testing_page' %}">
       {% csrf_token %}
 
-      <button class="btn btn-lg btn-primary btn-block" name="selected_subject" type="submit"
-        value="{{subject.id}}">{{subject.subject}}</button>
+      <button class="subject_button" name="selected_subject" type="submit"
+        value="{{subject.id}}"><span>{{subject.subject}}</span></button>
       <!-- <input type="subject" name="selected_subject"  id="" value="{{subject.subject}}"> -->
     </form>
     {% endfor %}
@@ -24,12 +27,12 @@
 
   <a class="closeBtn" href="{{variant_of_subject.get_absolute_url}}" id="{{variant_of_subject.id}}"></a>
 
-  <div id="posts">
+  <div id="posts" class="posts">
 
     {% for question in first_page %}
-    <h1>{{question.id}}</h1>
-    <img src="{{question.question.url}}" alt="Star" width="200" height="200">
-    <textarea name="name" id='{{question.id}}' rows="8" cols="80"></textarea>
+    <!-- <h1>{{question.id}}</h1> -->
+    <img src="{{question.question.url}}" class="question_photo" alt="Star">
+    <textarea name="name" id='{{question.id}}' class="answer_question" rows="8" cols="80"></textarea>
     {% endfor %}
 
 
@@ -37,30 +40,26 @@
 
   </div>
 
-  {% for i in page_range %}
+  <div class="links">
+    {% for item in filled_answers %}
+    {% if item.answer %}
+    <li><a href="{{item.page}}" id={{item.id_answer}} class="filled">{{item.page}}</a></li>
+    {% else %}
+    <li><a href="{{item.page}}" id={{item.id_answer}} class="unfilled">{{item.page}}</a></li>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+  </br>
+
+  <!-- {% for i in page_range %}
   <a href="{{i}}">{{i}}</a>
-  {% endfor %}
+  {% endfor %} -->
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
-  <!-- <script>
-    function myFunction(){
-      var answers = new Map();
-      answers.set("page_n",3);
-      
-      var textareaList = document.getElementsByTagName("textarea");
-        for(var i = 0; i < textareaList.length; i++){
-            var ans = textareaList[i].id;
-            // console.log(textareaList[i].id.substring(textareaList[i].id.indexOf('-') + 1, textareaList[i].id.indexOf('+')) + ' -' + textareaList[i].value);
-            
-            answers.set(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')), textareaList[i].value)
-            //DO SOMETHING
-        }
-        console.log(answers)
-        // console.log(typeof textareaList)
-    };
-  </script> -->
+
 
   <script>
     $('a').click(function (event) {
@@ -70,22 +69,21 @@
       var answers = [];
       var index = 0;
       var question;
-      // var answers2 = [];
-      // var indexes = new Map();
-      // var indexesimg = new Map();
-      // var lastQuestion = 0;
-      // var n = 3;
-      // answers.set("page_n",3);
+      var filled_answer = -1;
+
+
 
       var textareaList = document.getElementsByTagName("textarea");
       for (var i = 0; i < textareaList.length; i++) {
         var index = textareaList[i].id;
         console.log("index=" + index)
-        // console.log(textareaList[i].id.substring(textareaList[i].id.indexOf('-') + 1, textareaList[i].id.indexOf('+')) + ' -' + textareaList[i].value);
-        // console.log(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')))
-        // answers2.push(ans.substring(ans.indexOf('-') + 1, ans.indexOf('+')));
+
         answers.push(index);
         answers.push(textareaList[i].value);
+
+        if (textareaList[i].value != "") {
+          filled_answer = index;
+        }
         //DO SOMETHING
       }
       console.log(answers)
@@ -108,7 +106,6 @@
           $.each(resp, function (i, val) {
             response = val
             console.log("id = " + response.id)
-            // console.log(val.question.url + "dasd");
             //apending posts
 
             // $('#posts').append(
@@ -130,15 +127,23 @@
               //loop
               $('#posts').html('')
               console.log('val = ' + resp)
+
+              // document.getElementsByClassName(String(page_n)).style.backgroundColor = "blue";
+
+              if (filled_answer != -1) {
+                console.log(typeof filled_answer.toString());
+                document.getElementById(String(filled_answer)).className = "filled";
+              }
+
               $.each(resp2, function (i, val) {
 
                 console.log("yes =")
                 $('#posts').append(
-                  '<h1>' + val.question + '</h1>' + '\n' +
+                  // '<h1>' + val.question + '</h1>' + '\n' +
                   '<img src=' + response.question +
-                  ' alt="Star" width="200" height="200">' + '\n' +
+                  ' alt="Star" class="question_photo" >' +
                   '<textarea name="name" id="' + val.question +
-                  '" rows="8" cols="80">' + val.answer + '</textarea>'
+                  '" class = "answer_question" rows="8" cols="80">' + val.answer + '</textarea>'
                 )
 
               });

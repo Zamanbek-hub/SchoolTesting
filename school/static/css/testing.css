@@ -1,21 +1,105 @@
-.slide{
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.5s;
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+
+li {
+  display: inline-block;
+  list-style: none;
+
+
 }
-.active-slide{
-  opacity: 1;
-  z-index: 2;
+
+.unfilled {
+  color: black;
+  text-align: center;
+  display: block;
+  background-color: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #BDBDBD;
+  text-decoration: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
 }
-.quiz-container{
-  position: relative;
+
+.filled {
+  color: black;
+  text-align: center;
+  display: block;
+  background-color: #A9AAA8;
+  border-radius: 4px;
+  border: 1px solid #BDBDBD;
+  text-decoration: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.subjects {
+  float: left;
+  width: 30%;
   height: 200px;
-  margin-top: 40px;
 }
-body{
-  background-color: ;
+
+.subject_form {
+  margin-top: 10px;
+}
+
+.subject_button {
+  position: relative;
+  background: #f3f0f1;
+  /* margin-bottom: 5px; */
+  border-radius: 12px;
+  border: 0px solid #ffffff;
+  width: 70%;
+  height: 50px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: semibold;
+  font-size: 10px;
+
+}
+
+/* .subject_button span {
+  line-height: 100px;
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: semibold;
+} */
+
+.subject_button {
+  box-shadow: -6px -6px 10px rgba(255, 255, 255, 0.8), 6px 6px 10px rgba(0, 0, 0, 0.2);
+  color: #6f6cde;
+}
+
+.subject_button:hover {
+  opacity: 0.3;
+  box-shadow: -6px -6px 10px rgba(255, 255, 255, 0.8), 6px 6px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.posts {
+  float: right;
+  width: 70%;
+}
+
+.links {
+  width: 30%;
+  float: left;
+}
+
+.answer_question {
+  width: 100%;
+  height: 150px;
+  border-radius: 5px;
+}
+
+.question_photo {
+  width: 100%;
+  height: 200px;
+  border-radius: 5px;
 }

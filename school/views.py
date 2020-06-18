@@ -57,7 +57,6 @@ def pagination_pro(request, student, grade,  variant_of_subject):
     page_range = paginatorr.page_range
 
     #
-
     if request.method == 'POST':
         # return HttpResponse('hellow')
         page_n = request.POST.get('page_n', None)  # getting number of page
@@ -95,13 +94,26 @@ def pagination_pro(request, student, grade,  variant_of_subject):
 
         return JsonResponse(serializer.data, safe=False)
 
+    page_range_to_list = list(page_range)
+
+    filled_answers = []
+    for i in page_range_to_list:
+        if Answer.objects.filter(question=questions[i - 1]).filter(student=student).exists():
+            check = AnswerCheck(
+                page=i, id_answer=questions[i-1].id, answer=True)
+        else:
+            check = AnswerCheck(
+                page=i, id_answer=questions[i-1].id)
+        filled_answers.append(check)
     subjects = Subject.objects.filter(grade=Grade.objects.get(grade=grade))
+    # print(filled_answers)
 
     context = {
         'paginatorr': paginatorr,
         'first_page': first_page,
         'page_range': page_range,
         'subjects': subjects,
+        'filled_answers': filled_answers,
     }
 
     return render(request, 'school/ajax.html', context)
@@ -141,21 +153,23 @@ def testing_page(request):
         return HttpResponseRedirect(reverse_lazy('pagination_p', kwargs={'student': 1, 'grade': 6, 'variant_of_subject': variant}))
 
     for subject in subjects:
-        testing = Testing.objects.filter(student=1, subject=subject)
-        testing.delete()
+        if Testing.objects.filter(student=1).filter(subject=subject):
+            pass
+        else:
+            # testing = Testing.objects.filter(student=1).filter(subject = subject)
+            # testing.delete()
+            variants = Variant.objects.filter(subject=subject)
+            random_variant = random.choice(variants)
+            # print(random_variant)
+            testing = Testing(student=Student.objects.get(
+                id=1), subject=Subject.objects.get(id=subject.id), variant=random_variant)
 
-        variants = Variant.objects.filter(subject=subject)
-        random_variant = random.choice(variants)
-        # print(random_variant)
-        testing = Testing(student=Student.objects.get(
-            id=1), subject=Subject.objects.get(id=subject.id), variant=random_variant)
-
-        testing.save()
+            testing.save()
     return render(request, 'school/ajax.html', {'subjects': subjects})
 
 
 def create_test(request):
-    for z in range(5, 11):
+    for z in range(1, 7):
         for i in range(0, 20):
             # true_answer = str(i)
             image_path = 'questions/zvezda_chernyj_fon_svet_118237_4016x2881_1.jpg'
