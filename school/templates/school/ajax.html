@@ -50,7 +50,12 @@
     {% endfor %}
   </div>
 
+  <span>Cізде уақыт қалды:</span>
+  <p id="time">{{hours}} : {{minutes}} : {{seconds}}</p>
   </br>
+
+  <p id="demo"></p>
+  Second pass: <span id="count">-1</span>
 
   <!-- {% for i in page_range %}
   <a href="{{i}}">{{i}}</a>
@@ -58,6 +63,75 @@
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+
+  <script type="text/javascript">
+    var id = setInterval("MyFunct_1()", 1000)
+
+
+
+
+    function MyFunct_1() {
+      time = document.getElementById("time").innerText
+      time = time.split(":")
+
+
+      hours = parseInt(time[0])
+      minutes = parseInt(time[1])
+      seconds = parseInt(time[2])
+      console.log(hours + ":" + minutes + ":" + seconds)
+
+      seconds--;
+
+      if (minutes <= 0 && seconds < 0) {
+        hours -= 1;
+        minutes = 60;
+      }
+      if (seconds < 0) {
+        // if (!minutes <= 0) {
+        //   minutes -= 1;
+        // }
+        minutes -= 1;
+        seconds = 59;
+
+      }
+
+
+
+      document.getElementById("time").innerHTML = hours + " : " + minutes + " : " + seconds;
+    }
+
+    // var minute = 0;
+
+    // function timer() {
+    //   time = document.getElementById("time").innerText
+    //   time = time.split(":")
+
+    //   hours = parseInt(time[0])
+    //   minutes = parseInt(time[1])
+    //   seconds = parseInt(time[2])
+    //   console.log(hours + ":" + minutes + ":" + seconds)
+
+    //   seconds--;
+
+    //   if (seconds <= 0) {
+    //     minutes -= 1;
+    //     counter = 59;
+    //   }
+    //   if (minute <= 0) {
+    //     hours -= 1
+    //     minutes = 59
+    //   }
+    //   // if (minute == 0)
+    //   //   document.getElementById("count").innerHTML = counter;
+    //   // else
+    //   //   document.getElementById("count").innerHTML = minute + " : " + counter;
+
+    //   // document.getElementById("time").innerHTML = hours + " : " + minutes + " : " + seconds;
+
+    //   setTimeout("timer()", 1000);
+    // }                                                              
+  </script>
 
 
 
@@ -163,6 +237,8 @@
 
     });
   </script>
+
+
 </body>
 
 </html>
