@@ -16,4 +16,5 @@ urlpatterns = [
     path('create_test',     views.create_test,      name='create_test'),
     path('moderator',       views.moderator,         name='moderator'),
     path('testing_page',    views.testing_page,     name='testing_page'),
+    path('deadline',    views.deadline,     name="deadline"),
 ]

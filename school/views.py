@@ -38,6 +38,10 @@ def test(request):
     return render(request, 'school/testing.html')
 
 
+def deadline(request):
+    return render(request, 'school/deadline.html')
+
+
 def pagination(request):
     questions = Question.objects.all().order_by('id')
 
@@ -99,6 +103,8 @@ def pagination_pro(request, student, grade,  variant_of_subject):
         serializer = QuestionModelSerializer(paginatorr.page(
             page_n).object_list, many=True)  # sending as json
 
+        hours, minutes, seconds = calculate_time(Student.objects.get(id=1))
+
         return JsonResponse(serializer.data, safe=False)
 
     page_range_to_list = list(page_range)
@@ -115,6 +121,10 @@ def pagination_pro(request, student, grade,  variant_of_subject):
     subjects = Subject.objects.filter(grade=Grade.objects.get(grade=grade))
     # print(filled_answers)
     hours, minutes, seconds = calculate_time(Student.objects.get(id=1))
+
+    if(hours == -1 and minutes == -1 and seconds == -1):
+        print("deadlinee")
+        return HttpResponseRedirect(reverse_lazy('deadline',))
 
     context = {
         'paginatorr': paginatorr,
@@ -167,9 +177,14 @@ def formatting_time(duration):
 def calculate_time(student):
     time = timezone.now() - student.start
     grade = student.grade
-    time = grade.duration - time
+    difference = grade.duration - time
 
-    hours, minutes, seconds = formatting_time(time)
+    print("timeee:", time.seconds)
+
+    if(time.seconds > grade.duration.seconds):
+        return -1, -1, -1
+
+    hours, minutes, seconds = formatting_time(difference)
     return hours, minutes, seconds
 
 
@@ -179,8 +194,6 @@ def testing_page(request):
 
     hours, minutes, seconds = calculate_time(Student.objects.get(id=1))
 
-    now = timezone.now()
-    print(now)
     if request.method == 'POST':
         selected_subject = int(request.POST.get('selected_subject', None))
         hidden_id = request.POST.get('hidden_id', None)
@@ -212,6 +225,8 @@ def testing_page(request):
                 id=1), subject=Subject.objects.get(id=subject.id), variant=random_variant)
 
             testing.save()
+    if(hours == -1 and minutes == -1 and seconds == -1):
+        return HttpResponseRedirect(reverse_lazy('deadline',))
     return render(request, 'school/ajax.html', {'subjects': subjects, 'hours': hours, 'minutes': minutes, 'seconds': seconds})
 
 
