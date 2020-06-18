@@ -23,7 +23,14 @@
         value="{{subject.id}}"><span>{{subject.subject}}</span></button>
       <!-- <input type="subject" name="selected_subject"  id="" value="{{subject.subject}}"> -->
     </form>
+
+
     {% endfor %}
+    <form id="loginForm" name="loginForm" method="post" action="{% url 'deadline' %}">
+      {% csrf_token %}
+      <!-- <input type="submit" id="loginSubmit" value="Log in" /> -->
+
+    </form>
   </div>
 
   <a class="closeBtn" href="{{variant_of_subject.get_absolute_url}}" id="{{variant_of_subject.id}}"></a>
@@ -55,8 +62,8 @@
   <p id="time">{{hours}} : {{minutes}} : {{seconds}}</p>
   </br>
 
-  <p id="demo"></p>
-  Second pass: <span id="count">-1</span>
+  <!-- <p id="demo"></p>
+  Second pass: <span id="count">-1</span> -->
 
   <!-- {% for i in page_range %}
   <a href="{{i}}">{{i}}</a>
@@ -94,8 +101,10 @@
 
       }
 
-
-
+      endtime = document.getElementById("time").innerText;
+      if (endtime == "0 : 0 : 0") {
+        document.forms['loginForm'].submit();
+      }
       document.getElementById("time").innerHTML = hours + " : " + minutes + " : " + seconds;
     }
   </script>
