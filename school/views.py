@@ -183,7 +183,16 @@ def testing_page(request):
     print(now)
     if request.method == 'POST':
         selected_subject = int(request.POST.get('selected_subject', None))
-        print(selected_subject)
+        hidden_id = request.POST.get('hidden_id', None)
+        hidden_answer = request.POST.get('hidden_answer', None)
+        print("answer:", hidden_id)
+
+        if hidden_answer != "" and hidden_id != "":
+            hidden_id = int(hidden_id)
+            answer = Answer(answer=hidden_answer,
+                            question=Question.objects.get(id=hidden_id), student=Student.objects.get(id=1))
+            answer.save()
+
         variant = Testing.objects.filter(
             student=1, subject=selected_subject).get().variant
         print(variant)

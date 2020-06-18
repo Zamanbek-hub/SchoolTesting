@@ -17,7 +17,8 @@
     {% for subject in subjects %}
     <form method='POST' class="subject_form" action="{% url 'testing_page' %}">
       {% csrf_token %}
-
+      <input type="hidden" name="hidden_id" class="hidden_id" value="">
+      <input type="hidden" name="hidden_answer" class="hidden_answer" value="">
       <button class="subject_button" name="selected_subject" type="submit"
         value="{{subject.id}}"><span>{{subject.subject}}</span></button>
       <!-- <input type="subject" name="selected_subject"  id="" value="{{subject.subject}}"> -->
@@ -68,9 +69,6 @@
   <script type="text/javascript">
     var id = setInterval("MyFunct_1()", 1000)
 
-
-
-
     function MyFunct_1() {
       time = document.getElementById("time").innerText
       time = time.split(":")
@@ -100,39 +98,30 @@
 
       document.getElementById("time").innerHTML = hours + " : " + minutes + " : " + seconds;
     }
-
-    // var minute = 0;
-
-    // function timer() {
-    //   time = document.getElementById("time").innerText
-    //   time = time.split(":")
-
-    //   hours = parseInt(time[0])
-    //   minutes = parseInt(time[1])
-    //   seconds = parseInt(time[2])
-    //   console.log(hours + ":" + minutes + ":" + seconds)
-
-    //   seconds--;
-
-    //   if (seconds <= 0) {
-    //     minutes -= 1;
-    //     counter = 59;
-    //   }
-    //   if (minute <= 0) {
-    //     hours -= 1
-    //     minutes = 59
-    //   }
-    //   // if (minute == 0)
-    //   //   document.getElementById("count").innerHTML = counter;
-    //   // else
-    //   //   document.getElementById("count").innerHTML = minute + " : " + counter;
-
-    //   // document.getElementById("time").innerHTML = hours + " : " + minutes + " : " + seconds;
-
-    //   setTimeout("timer()", 1000);
-    // }                                                              
   </script>
 
+  <script type="text/javascript">
+    $(document).ready(function () {
+      answer = document.getElementsByClassName("answer_question")
+      // console.log(answer)
+
+      $(document).on('input', '.answer_question', function () {
+        var elem = $(".answer_question");
+        if (answer[0].value != "") {
+          collection = document.getElementsByClassName("hidden_answer");
+          Array.from(collection).forEach(function (element) {
+            element.value = answer[0].value
+          });
+          collection_2 = document.getElementsByClassName("hidden_id");
+          Array.from(collection_2).forEach(function (item) {
+            item.value = elem.attr('id')
+          });
+          // alert(elem.attr('id'));
+        }
+        console.log(answer[0].value)
+      });
+    });
+  </script>
 
 
   <script>
@@ -217,8 +206,12 @@
                   '<img src=' + response.question +
                   ' alt="Star" class="question_photo" >' +
                   '<textarea name="name" id="' + val.question +
-                  '" class = "answer_question" rows="8" cols="80">' + val.answer + '</textarea>'
+                  '"class="answer_question" rows="8" cols="80">' + val.answer + '</textarea>'
+
+
                 )
+                // document.getElementById("question_photo").src = response.question;
+                // document.getElementById("answer_question").value = val.answer;
 
               });
 
