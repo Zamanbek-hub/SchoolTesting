@@ -6,6 +6,9 @@ from django.core.paginator import Paginator
 from .serializer import *
 from django.http import JsonResponse
 import random
+import datetime
+from django.utils import timezone
+from django.utils.timezone import utc
 
 
 # Create your views here.
@@ -20,6 +23,7 @@ def check(request):
 
 def index(request):
     return render(request, 'school/index.html')
+
 
 def rate(request):
     return render(request, 'school/rate.html')
@@ -110,6 +114,7 @@ def pagination_pro(request, student, grade,  variant_of_subject):
         filled_answers.append(check)
     subjects = Subject.objects.filter(grade=Grade.objects.get(grade=grade))
     # print(filled_answers)
+    hours, minutes, seconds = calculate_time(Student.objects.get(id=1))
 
     context = {
         'paginatorr': paginatorr,
@@ -117,7 +122,12 @@ def pagination_pro(request, student, grade,  variant_of_subject):
         'page_range': page_range,
         'subjects': subjects,
         'filled_answers': filled_answers,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds,
     }
+
+    print(type(hours))
 
     return render(request, 'school/ajax.html', context)
 
@@ -142,10 +152,35 @@ def serial_answers(request):
     return HttpResponse("false")
 
 
+def formatting_time(duration):
+    seconds = duration.seconds
+
+    minutes = seconds // 60
+    seconds = seconds % 60
+
+    hours = minutes // 60
+    minutes = minutes % 60
+
+    return hours, minutes, seconds
+
+
+def calculate_time(student):
+    time = timezone.now() - student.start
+    grade = student.grade
+    time = grade.duration - time
+
+    hours, minutes, seconds = formatting_time(time)
+    return hours, minutes, seconds
+
+
 def testing_page(request):
     subjects = Subject.objects.filter(grade=Grade.objects.get(grade=6))
     print(subjects)
 
+    hours, minutes, seconds = calculate_time(Student.objects.get(id=1))
+
+    now = timezone.now()
+    print(now)
     if request.method == 'POST':
         selected_subject = int(request.POST.get('selected_subject', None))
         print(selected_subject)
@@ -168,7 +203,7 @@ def testing_page(request):
                 id=1), subject=Subject.objects.get(id=subject.id), variant=random_variant)
 
             testing.save()
-    return render(request, 'school/ajax.html', {'subjects': subjects})
+    return render(request, 'school/ajax.html', {'subjects': subjects, 'hours': hours, 'minutes': minutes, 'seconds': seconds})
 
 
 def create_test(request):
