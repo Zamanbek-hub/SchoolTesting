@@ -9,11 +9,20 @@
   <title>Document</title>
   <link rel="stylesheet" href="{% static 'css/testing.css' %}">
 
+
+
+
 </head>
 
 <body>
 
   <div class="subjects">
+
+    <div class="timer">
+      <span class="rest_time">Cізде уақыт қалды:</span> </br>
+      <span id="time">{{hours}} : {{minutes}} : {{seconds}}</span>
+    </div>
+
     {% for subject in subjects %}
     <form method='POST' class="subject_form" action="{% url 'testing_page' %}">
       {% csrf_token %}
@@ -26,11 +35,7 @@
 
 
     {% endfor %}
-    <form id="loginForm" name="loginForm" method="post" action="{% url 'deadline' %}">
-      {% csrf_token %}
-      <!-- <input type="submit" id="loginSubmit" value="Log in" /> -->
 
-    </form>
   </div>
 
   <a class="closeBtn" href="{{variant_of_subject.get_absolute_url}}" id="{{variant_of_subject.id}}"></a>
@@ -45,10 +50,10 @@
 
 
     <!-- <button onclick="myFunction()"> Submit</button> -->
-
   </div>
 
   <div class="links">
+
     {% for item in filled_answers %}
     {% if item.answer %}
     <li><a href="{{item.page}}" id={{item.id_answer}} class="filled">{{item.page}}</a></li>
@@ -56,10 +61,16 @@
     <li><a href="{{item.page}}" id={{item.id_answer}} class="unfilled">{{item.page}}</a></li>
     {% endif %}
     {% endfor %}
+
   </div>
 
-  <span>Cізде уақыт қалды:</span>
-  <p id="time">{{hours}} : {{minutes}} : {{seconds}}</p>
+  <form id="loginForm" name="loginForm" method="post" action="{% url 'deadline' %}">
+    {% csrf_token %}
+    <!-- <input type="submit" id="loginSubmit" value="Log in" /> -->
+
+  </form>
+
+
   </br>
 
   <!-- <p id="demo"></p>
@@ -145,6 +156,9 @@
       var current_question = $(this).attr('id');
       var previous_question = $(".answer_question").attr('id');
 
+      endtime = document.getElementById("time").innerText;
+
+
 
       var textareaList = document.getElementsByTagName("textarea");
       for (var i = 0; i < textareaList.length; i++) {
@@ -198,7 +212,7 @@
             success: function (resp2) {
 
               document.getElementById(previous_question).style.border = "1px solid #BDBDBD";
-              document.getElementById(current_question).style.border = "thick solid #0000FF";
+              document.getElementById(current_question).style.border = "2px solid #0000FF";
 
               //loop
               $('#posts').html('')
