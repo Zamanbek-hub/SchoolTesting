@@ -84,7 +84,7 @@
       hours = parseInt(time[0])
       minutes = parseInt(time[1])
       seconds = parseInt(time[2])
-      console.log(hours + ":" + minutes + ":" + seconds)
+      // console.log(hours + ":" + minutes + ":" + seconds)
 
       seconds--;
 
@@ -123,11 +123,11 @@
           });
           collection_2 = document.getElementsByClassName("hidden_id");
           Array.from(collection_2).forEach(function (item) {
-            item.value = elem.attr('id')
+            item.value = elem.attr('id');
           });
           // alert(elem.attr('id'));
         }
-        console.log(answer[0].value)
+        // console.log(answer[0].value)
       });
     });
   </script>
@@ -142,7 +142,8 @@
       var index = 0;
       var question;
       var filled_answer = -1;
-
+      var current_question = $(this).attr('id');
+      var previous_question = $(".answer_question").attr('id');
 
 
       var textareaList = document.getElementsByTagName("textarea");
@@ -195,6 +196,9 @@
               csrfmiddlewaretoken: '{{ csrf_token }}',
             },
             success: function (resp2) {
+
+              document.getElementById(previous_question).style.border = "1px solid #BDBDBD";
+              document.getElementById(current_question).style.border = "thick solid #0000FF";
 
               //loop
               $('#posts').html('')
