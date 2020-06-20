@@ -24,7 +24,7 @@
     </div>
 
     {% for subject in subjects %}
-    <form method='POST' class="subject_form" action="{% url 'testing_page' %}">
+    <form method='POST' class="subject_form" action="{% url 'testing_page' grade student %}">
       {% csrf_token %}
       <input type="hidden" name="hidden_id" class="hidden_id" value="">
       <input type="hidden" name="hidden_answer" class="hidden_answer" value="">
@@ -73,6 +73,10 @@
 
   </br>
 
+
+  <input type="hidden" name="hidden_time" id="hidden_time" class="hidden_time" value="False">
+  <input type="hidden" name="student_id" id="student_id" value="{{student}}">
+
   <!-- <p id="demo"></p>
   Second pass: <span id="count">-1</span> -->
 
@@ -114,6 +118,7 @@
 
       endtime = document.getElementById("time").innerText;
       if (endtime == "0 : 0 : 0") {
+        document.getElementById("hidden_time").value = "True";
         document.forms['loginForm'].submit();
       }
       document.getElementById("time").innerHTML = hours + " : " + minutes + " : " + seconds;
@@ -150,14 +155,19 @@
       var page_n = $(this).attr('href');
       // console.log(page_n);
       var answers = [];
+      var indexes = [];
       var index = 0;
       var question;
       var filled_answer = -1;
       var current_question = $(this).attr('id');
       var previous_question = $(".answer_question").attr('id');
+      var student_id = document.getElementById("student_id").value;
 
-      endtime = document.getElementById("time").innerText;
+      endtime = document.getElementById("hidden_time").value;
 
+      if (endtime == "True") {
+        document.forms['loginForm'].submit();
+      }
 
 
       var textareaList = document.getElementsByTagName("textarea");
@@ -165,7 +175,7 @@
         var index = textareaList[i].id;
         console.log("index=" + index)
 
-        answers.push(index);
+        indexes.push(index);
         answers.push(textareaList[i].value);
 
         if (textareaList[i].value != "") {
@@ -181,6 +191,7 @@
         url: $('.closeBtn').attr("href"), // name of url
         data: {
           page_n: page_n, //page_number
+          indexes: JSON.stringify(indexes),
           answers: JSON.stringify(answers),
           traditional: true,
           csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -189,7 +200,7 @@
           console.log('success')
           //loop
           $('#posts').html('')
-
+          console.log("student_id = " + student_id);
           $.each(resp, function (i, val) {
             response = val
             console.log("id = " + response.id)
@@ -205,7 +216,9 @@
             type: "POST",
             url: "{% url 'serial_answers' %}", // name of url
             data: {
-              question: JSON.stringify(response.id),
+
+              question_id: JSON.stringify(response.id),
+              student_id: student_id,
               traditional: true,
               csrfmiddlewaretoken: '{{ csrf_token }}',
             },
