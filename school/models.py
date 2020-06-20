@@ -42,9 +42,12 @@ class Teacher(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     school = models.CharField('school', max_length=40, blank=True)
-    phone = models.CharField('phone', max_length=16, blank=True)
+    phone = models.CharField('phone', max_length=20, blank=True, unique=True)
+    parents_phone = models.CharField(
+        'parents_phone', max_length=20, blank=True)
     result = models.CharField('result', max_length=4, blank=True)
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE)
+    address = models.TextField(blank=True)
     start = models.DateTimeField(default=now)
 
     def __str__(self):
